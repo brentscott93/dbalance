@@ -3,7 +3,11 @@
 
 # dbalance
 
-<img src = "inst/hex-dbalance.png">
+<div style="text-align: center">
+
+<img src = "inst/hex-dbalance.png" width="200">
+
+</div>
 
 <!-- badges: start -->
 <!-- badges: end -->
