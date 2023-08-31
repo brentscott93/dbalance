@@ -18,7 +18,7 @@ calc_critical_speed <- function(pr_data){
 
   pr_data %>%
     dplyr::group_by(athlete) %>%
-    dplyr::nest(pr_data = !athlete) %>%
+    tidyr::nest(pr_data = !athlete) %>%
     dplyr::mutate(cs_mod = map(pr_data, ~lm(distance_meters ~ seconds, data = .x)),
            d_prime_meters = map_dbl(cs_mod, ~coef(.x)[[1]]),
            critical_speed_meters_second =  map_dbl(cs_mod, ~coef(.x)[[2]]))
@@ -52,7 +52,7 @@ calc_d_balance <- function(runner_data,
 
   if(runner_col_names != FALSE){
     if(length(runner_col_names) != 3) stop("runner_col_names must be length 3")
-    runner_data %<>%
+    runner_data <- runer_data %>%
       dplyr::rename("athlete" = runner_col_names[[1]],
                     "critical_speed_meters_second" = runner_col_names[[2]],
                     "d_prime_meters" = runner_col_names[[3]])
@@ -60,12 +60,12 @@ calc_d_balance <- function(runner_data,
 
   if(race_col_names != FALSE){
     if(length(race_col_names) != 3) stop("race_col_names must be length 2")
-    race_data %<>%
+    race_data <- race_data %>%
       dplyr::rename("lap_leader_speed_meters_second" = race_col_names[[1]],
                     "lap_distance_meters" = race_col_names[[2]])
   }
 
-  race_data %<>%
+  race_data <- race_data %>%
     dplyr::mutate(
       total_distance_meters = cumsum(lap_distance_meters),
       lap_split = lap_distance_meters/lap_leader_speed_meters_second,
